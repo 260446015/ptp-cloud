@@ -1,0 +1,15 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /ptp-auth
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+spring:
+  application:
+    name: ptp-auth
+security:
+  oauth2:
+    authorization:
+      check-token-access: permitAll()

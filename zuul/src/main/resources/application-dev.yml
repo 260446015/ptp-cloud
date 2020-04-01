@@ -1,0 +1,12 @@
+zuul:
+  routes:
+    ptp-page:
+      stripPrefix: false
+      path: /ptp-page/**
+      url: http://localhost:8080
+#      serviceId: ptp-page
+    ptp-engine:
+      stripPrefix: false
+      path: /ptp-engine/**
+      url: http://localhost:8082
+#      serviceId: ptp-engine
