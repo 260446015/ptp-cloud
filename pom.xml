@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.yonyougov</groupId>
     <artifactId>ptp-cloud</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>ptp-cloud</name>
     <description>Demo project for Spring Boot</description>
     <parent>
@@ -89,4 +89,6 @@
     <!-- release -->
 
     <!-- yz -->
+
+    <!-- ydw -->
 </project>
