@@ -22,14 +22,4 @@ public class GatewayApplication {
         System.out.println(name);
     }
 
-    @Bean
-    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-        return builder.routes()
-                .route(p -> p
-                        .path("/get")
-                        .filters(f -> f.addRequestHeader("Hello", "World"))
-                        .uri("http://httpbin.org:80"))
-                .build();
-    }
-
 }

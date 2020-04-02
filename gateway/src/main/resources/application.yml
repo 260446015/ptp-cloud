@@ -8,3 +8,19 @@ eureka:
 spring:
   application:
     name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: client
+          uri: http://client
+          predicates:
+            - Path=/client/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  security:
+    enabled: false
+
