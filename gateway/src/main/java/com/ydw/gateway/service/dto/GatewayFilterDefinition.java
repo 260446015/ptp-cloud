@@ -1,5 +1,6 @@
 package com.ydw.gateway.service.dto;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -25,4 +26,9 @@ public class GatewayFilterDefinition implements Serializable {
      * 对应的路由规则
      */
     private Map<String, String> args = new LinkedHashMap<>();
+
+    @Override
+    public String toString() {
+        return JSONObject.toJSONString(this);
+    }
 }

@@ -12,15 +12,13 @@ spring:
     gateway:
       routes:
         - id: client
-          uri: http://client
+          uri: lb://client
           predicates:
             - Path=/client/**
-
+#          filters:
+#            - StripPrefix=0
 management:
   endpoints:
     web:
       exposure:
-        include: '*'
-  security:
-    enabled: false
-
+        include: "*"

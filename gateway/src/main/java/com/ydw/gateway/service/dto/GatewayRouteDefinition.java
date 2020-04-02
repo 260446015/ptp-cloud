@@ -1,5 +1,6 @@
 package com.ydw.gateway.service.dto;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -40,4 +41,9 @@ public class GatewayRouteDefinition implements Serializable {
      * 路由执行的顺序
      */
     private int order = 0;
+
+    @Override
+    public String toString() {
+        return JSONObject.toJSONString(this);
+    }
 }
