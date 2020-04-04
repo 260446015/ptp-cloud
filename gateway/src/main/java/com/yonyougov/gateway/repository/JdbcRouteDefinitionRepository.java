@@ -1,6 +1,6 @@
 package com.yonyougov.gateway.repository;
 
-import com.yonyougov.UuidUtils;
+import com.yonyougov.common.UuidUtils;
 import com.yonyougov.gateway.entity.GatewayFilterDefinition;
 import com.yonyougov.gateway.entity.GatewayPredicateDefinition;
 import com.yonyougov.gateway.entity.GatewayRouteDefinition;

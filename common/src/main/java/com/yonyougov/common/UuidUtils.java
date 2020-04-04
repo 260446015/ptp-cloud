@@ -1,4 +1,4 @@
-package com.yonyougov;
+package com.yonyougov.common;
 
 
 /**

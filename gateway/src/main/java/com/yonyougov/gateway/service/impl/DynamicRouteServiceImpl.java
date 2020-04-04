@@ -39,6 +39,7 @@ public class DynamicRouteServiceImpl implements ApplicationEventPublisherAware {
      * @param gatewayRouteDefinition
      * @return
      */
+    @Transactional
     public String add(GatewayRouteDefinition gatewayRouteDefinition) {
         RouteDefinition routeDefinition = assembleRouteDefinition(gatewayRouteDefinition);
         return saveRouteDefinition(routeDefinition);
@@ -49,6 +50,7 @@ public class DynamicRouteServiceImpl implements ApplicationEventPublisherAware {
      * @param gatewayRouteDefinition
      * @return
      */
+    @Transactional
     public String update(GatewayRouteDefinition gatewayRouteDefinition) {
         RouteDefinition definition = assembleRouteDefinition(gatewayRouteDefinition);
         try {
@@ -68,6 +70,7 @@ public class DynamicRouteServiceImpl implements ApplicationEventPublisherAware {
      * @param id
      * @return
      */
+    @Transactional
     public String delete(String id) {
         try {
             this.routeDefinitionWriter.delete(Mono.just(id));

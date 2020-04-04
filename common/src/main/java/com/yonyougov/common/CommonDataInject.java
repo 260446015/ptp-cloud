@@ -1,4 +1,4 @@
-package com.yonyougov;
+package com.yonyougov.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -28,6 +28,7 @@ public class CommonDataInject {
     @Pointcut("execution(* com.yonyougov.*.mapper.*Mapper.insert*(..))")
     private void insertCutMethod() {
     }
+
     @Pointcut("execution(* com.yonyougov..*.controller..*.*(..))")
     private void timePoint() {
     }

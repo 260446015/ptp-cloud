@@ -1,4 +1,4 @@
-package com.yonyougov;
+package com.yonyougov.common;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
