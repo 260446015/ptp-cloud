@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yonyougov.gateway.mapper.PtpRouteDefinitionMapper">
+  <resultMap id="BaseResultMap" type="com.yonyougov.gateway.entity.GatewayRouteDefinition">
+    <!--@mbg.generated-->
+    <id column="route_id" jdbcType="VARCHAR" property="routeId" />
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
+    <result column="uri" jdbcType="VARCHAR" property="uri" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    route_id, id, order_num, uri
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from ptp_route_definition
+    where route_id = #{routeId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from ptp_route_definition
+    where route_id = #{routeId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yonyougov.gateway.entity.GatewayRouteDefinition" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into ptp_route_definition (id, order_num, uri, route_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{orderNum,jdbcType=VARCHAR}, #{uri,jdbcType=VARCHAR}, #{routeId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yonyougov.gateway.entity.GatewayRouteDefinition">
+    <!--@mbg.generated-->
+    update ptp_route_definition
+    <set>
+      <if test="id != null">
+        id = #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNum != null">
+        order_num = #{orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="uri != null">
+        uri = #{uri,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where route_id = #{routeId,jdbcType=VARCHAR}
+  </update>
+  <resultMap extends="BaseResultMap" id="ComposeVO" type="com.yonyougov.gateway.entity.GatewayRouteDefinition">
+    <collection column="p_id" property="predicates" select="com.yonyougov.gateway.mapper.PtpPredicateDefinitionMapper.selectByPrimaryKey" />
+    <collection column="f_id" property="filters" select="com.yonyougov.gateway.mapper.PtpFilterDefinitionMapper.selectByPrimaryKey" />
+  </resultMap>
+  <select id="findAllWithCompose" resultMap="ComposeVO">
+    select prd.*,ppd.id p_id,pfd.id f_id
+    from ptp_route_definition prd
+    left join ptp_predicate_definition ppd on prd.route_id = ppd.route_id
+    left join ptp_filter_definition pfd on prd.route_id = pfd.route_id
+  </select>
+</mapper>

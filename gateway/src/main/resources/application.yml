@@ -8,6 +8,16 @@ eureka:
 spring:
   application:
     name: gateway
+  datasource:
+    url: jdbc:mysql://192.168.56.101:3306/menhu?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 123
+    username: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
   cloud:
     gateway:
       routes:
@@ -17,8 +27,14 @@ spring:
             - Path=/client/**
 #          filters:
 #            - StripPrefix=0
+mybatis:
+  mapper-locations: classpath*:mapper/*Mapper.xml
+  configuration:
+    call-setters-on-nulls: true
+    map-underscore-to-camel-case: true
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+

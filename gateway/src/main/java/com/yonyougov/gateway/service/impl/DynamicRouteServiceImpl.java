@@ -1,8 +1,12 @@
 package com.yonyougov.gateway.service.impl;
 
-import com.yonyougov.gateway.dto.GatewayFilterDefinition;
-import com.yonyougov.gateway.dto.GatewayPredicateDefinition;
 import com.yonyougov.gateway.dto.GatewayRouteDefinition;
+import com.yonyougov.gateway.entity.GatewayFilterDefinition;
+import com.yonyougov.gateway.entity.GatewayPredicateDefinition;
+import com.yonyougov.gateway.repository.GatewayFilterDefinitionRepository;
+import com.yonyougov.gateway.repository.GatewayPredicateDefinitionRepository;
+import com.yonyougov.gateway.repository.GatewayRouteDefinitionRepository;
+import com.yonyougov.gateway.repository.RedisRouteDefinitionRepository;
 import org.springframework.cloud.gateway.event.RefreshRoutesEvent;
 import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
@@ -11,6 +15,7 @@ import org.springframework.cloud.gateway.route.RouteDefinitionWriter;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
@@ -31,37 +36,33 @@ public class DynamicRouteServiceImpl implements ApplicationEventPublisherAware {
 
     /**
      * 增加路由
-     * @param definition
+     * @param gatewayRouteDefinition
      * @return
      */
-    public String add(RouteDefinition definition) {
-        routeDefinitionWriter.save(Mono.just(definition)).subscribe();
-        this.publisher.publishEvent(new RefreshRoutesEvent(this));
-        return "success";
+    public String add(GatewayRouteDefinition gatewayRouteDefinition) {
+        RouteDefinition routeDefinition = assembleRouteDefinition(gatewayRouteDefinition);
+        return saveRouteDefinition(routeDefinition);
     }
-
 
     /**
      * 更新路由
-     * @param definition
+     * @param gatewayRouteDefinition
      * @return
      */
-    public String update(RouteDefinition definition) {
+    public String update(GatewayRouteDefinition gatewayRouteDefinition) {
+        RouteDefinition definition = assembleRouteDefinition(gatewayRouteDefinition);
         try {
             this.routeDefinitionWriter.delete(Mono.just(definition.getId()));
         } catch (Exception e) {
             return "update fail,not find route  routeId: "+definition.getId();
         }
         try {
-            routeDefinitionWriter.save(Mono.just(definition)).subscribe();
-            this.publisher.publishEvent(new RefreshRoutesEvent(this));
-            return "success";
+            return saveRouteDefinition(definition);
         } catch (Exception e) {
             return "update route  fail";
         }
-
-
     }
+
     /**
      * 删除路由
      * @param id
@@ -84,7 +85,6 @@ public class DynamicRouteServiceImpl implements ApplicationEventPublisherAware {
 
     private RouteDefinition assembleRouteDefinition(GatewayRouteDefinition gatewayRouteDefinition) {
         RouteDefinition definition = new RouteDefinition();
-        // ID
         definition.setId(gatewayRouteDefinition.getId());
         // Predicates
         List<PredicateDefinition> predicateDefinitions = gatewayRouteDefinition.getPredicates().stream().map(gatewayPredicateDefinition -> {
@@ -106,5 +106,11 @@ public class DynamicRouteServiceImpl implements ApplicationEventPublisherAware {
         URI uri = UriComponentsBuilder.fromUriString(gatewayRouteDefinition.getUri()).build().toUri();
         definition.setUri(uri);
         return definition;
+    }
+
+    private String saveRouteDefinition(RouteDefinition routeDefinition) {
+        routeDefinitionWriter.save(Mono.just(routeDefinition)).subscribe();
+        this.publisher.publishEvent(new RefreshRoutesEvent(this));
+        return "success";
     }
 }
