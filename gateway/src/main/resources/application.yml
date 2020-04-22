@@ -43,18 +43,18 @@ management:
         allowed-methods: "*"
         allowed-headers: "*"
         allow-credentials: true
-#security:
-#  oauth2:
-#    client:
-#      clientId: client_1
-#      clientSecret: 123456
-#      userAuthorizationUri: http://localhost:8082/ptp-auth/oauth/authorize
-#      grant-type: code
-#      scope: all
-#      access-token-uri: http://localhost:8082/ptp-auth/oauth/token
-#    resource:
-#      token-info-uri: http://localhost:8082/ptp-auth/oauth/check_token
-#      prefer-token-info: true
+security:
+  oauth2:
+    client:
+      clientId: client_1
+      clientSecret: 123456
+      userAuthorizationUri: http://localhost:8082/ptp-auth/oauth/authorize
+      grant-type: code
+      scope: all
+      access-token-uri: http://localhost:8082/ptp-auth/oauth/token
+    resource:
+      token-info-uri: http://localhost:8082/ptp-auth/oauth/check_token
+      prefer-token-info: true
 
 logging:
   level:
