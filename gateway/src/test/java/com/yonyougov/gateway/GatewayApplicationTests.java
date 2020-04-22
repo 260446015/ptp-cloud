@@ -49,9 +49,11 @@ class GatewayApplicationTests {
         Flux.just("just", "just1", "just2").subscribe(System.out::println);
         Flux.fromArray(new String[] { "arr", "arr", "arr", "arr" })
                 .subscribe(System.out::println);*/
-        String str = "{pattern=/testhh/**}";
+        /*String str = "{pattern=/testhh/**}";
         JSONObject jsonObject = JSONObject.parseObject(str);
-        System.out.println(jsonObject);
+        System.out.println(jsonObject);*/
+        String s = Stream.of("a", "b", "c").filter(action -> action.equals("b")).findFirst().get();
+        System.out.println(s);
     }
 
 }

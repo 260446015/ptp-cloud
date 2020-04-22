@@ -36,7 +36,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory().withClient("client_1").secret(passwordEncoder.encode("123456"))
-                .redirectUris("http://www.baidu.com").authorizedGrantTypes("authorization_code","refresh_token","password")
+                .redirectUris("http://www.baidu.com","http://127.0.0.1:8081/login")
+                .authorizedGrantTypes("authorization_code","refresh_token","password")
                 .scopes("all").accessTokenValiditySeconds(7200).refreshTokenValiditySeconds(7200);
     }
 
