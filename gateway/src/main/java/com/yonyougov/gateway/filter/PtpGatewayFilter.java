@@ -3,6 +3,7 @@ package com.yonyougov.gateway.filter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -20,8 +21,8 @@ import java.util.Map;
  * @Author yindwe@yonyou.com
  * @Date 2020/4/22
  */
-@Component
-public class PtpGatewayFilter implements GatewayFilter, Ordered {
+//@Component
+public class PtpGatewayFilter implements GlobalFilter, Ordered {
 
     // url匹配器
     private AntPathMatcher pathMatcher = new AntPathMatcher();
