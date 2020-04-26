@@ -27,6 +27,10 @@ spring:
             - Path=/client/**
 #          filters:
 #            - StripPrefix=0
+        - id: ptp-auth
+          uri: lb://ptp-auth
+          predicates:
+            - Path=/ptp-auth/**
 mybatis:
   mapper-locations: classpath*:mapper/*Mapper.xml
   configuration:

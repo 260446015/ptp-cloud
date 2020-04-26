@@ -6,6 +6,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
@@ -50,8 +51,8 @@ public class PtpGatewayFilter implements GlobalFilter, Ordered {
                 return exchange.getResponse().setComplete();
             }else{
                 try {
-                    Map<String, Object> params =  (Map<String, Object>) redisTemplate.opsForValue().get("token:" + accessToken) ;
-                    if(params.isEmpty()){
+                    redisTemplate.setDefaultSerializer(new JdkSerializationRedisSerializer());
+                    if(null == redisTemplate.opsForValue().get("access:" + accessToken)){
                         exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                         return exchange.getResponse().setComplete();
                     }

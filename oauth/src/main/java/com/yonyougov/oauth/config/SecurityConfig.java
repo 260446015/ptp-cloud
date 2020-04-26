@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
 /**
  * @Author yindwe@yonyou.com
@@ -21,15 +22,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/**").fullyAuthenticated().and().httpBasic();
+        http.
+                authorizeRequests().antMatchers("/**").fullyAuthenticated()
+                .and().httpBasic()
+                .and().formLogin().loginPage("/login").failureUrl("/login?error").permitAll();
     }
 
     @Bean
     @Override
     protected UserDetailsService userDetailsService() {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
         String finalPassword = "{bcrypt}"+bCryptPasswordEncoder.encode("123456");
+        JdbcUserDetailsManager manager = new JdbcUserDetailsManager();
+        manager.;
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         manager.createUser(User.withUsername("user_1").password(finalPassword).authorities("USER").build());
         manager.createUser(User.withUsername("user_2").password(finalPassword).authorities("USER").build());
