@@ -13,6 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+
 /**
  * @Author yindwe@yonyou.com
  * @Date 2020/3/19
@@ -28,16 +31,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().formLogin().loginPage("/login").failureUrl("/login?error").permitAll();
     }
 
+    @Resource
+    private DataSource dataSource;
     @Bean
     @Override
     protected UserDetailsService userDetailsService() {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         String finalPassword = "{bcrypt}"+bCryptPasswordEncoder.encode("123456");
         JdbcUserDetailsManager manager = new JdbcUserDetailsManager();
-        manager.;
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("user_1").password(finalPassword).authorities("USER").build());
-        manager.createUser(User.withUsername("user_2").password(finalPassword).authorities("USER").build());
+        manager.setDataSource(dataSource);
+//        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+//        manager.createUser(User.withUsername("user_1").password(finalPassword).authorities("USER").build());
+//        manager.createUser(User.withUsername("user_2").password(finalPassword).authorities("USER").build());
 
         return manager;
     }

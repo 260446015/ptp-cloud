@@ -67,10 +67,5 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         security.checkTokenAccess("permitAll()");
     }
 
-    public static void main(String[] args) {
-        String str = PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("123456");
-        System.out.println(str);
-    }
-
 
 }
