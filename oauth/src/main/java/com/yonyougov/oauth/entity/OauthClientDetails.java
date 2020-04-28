@@ -3,14 +3,14 @@ package com.yonyougov.oauth.entity;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.provider.ClientDetails;
-import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /***
  * -- ----------------------------
@@ -33,42 +33,32 @@ import java.util.*;
  * ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
  * 所有加s的字段逗号分隔
  */
-//@Entity
+@Entity
+@Table(name = "oauth_client_details")
 @Getter
 @Setter
-@Table(name = "oauth_client_details")
 public class OauthClientDetails implements ClientDetails {
 
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.IDENTITY
-    )
-    private Long id;
-    @Column(unique = true)
+    @Column(unique = true,length = 48)
     private String clientId;
+    private String resourceIds;
+    private String clientSecret;
+    private String scope;
+    private String authorizedGrantTypes;
+    private String webServerRedirectUri;
+    private String authorities;
+    private Integer accessTokenValidity;
+    private Integer refreshTokenValidity;
+    @Column(length = 4096)
+    private String additionalInformation;
     @Column
-    private String resources;
+    private String autoapprove;
+    private String loadClientByClientId;
     @Column
     private Boolean secretRequired;
     @Column
-    private String clientSecret;
-    @Column
     private Boolean scoped;
-    @Column
-    private String scopes;
-    @Column
-    private String grantTypes;
-    @Column
-    private String registeredRedirectUris;
-    @Column
-    private String grantedAuthorities;
-    @Column
-    private Integer accessTokenValiditySeconds;
-    @Column
-    private Integer refreshTokenValiditySeconds;
-    @Column
-    private String additionalInformations;
-    private String loadClientByClientId;
 
     @Override
     public String getClientId() {
@@ -77,73 +67,45 @@ public class OauthClientDetails implements ClientDetails {
 
     @Override
     public Set<String> getResourceIds() {
-        if (StringUtils.isNotBlank(resources)) {
-            return new HashSet<>(Arrays.asList(resources.split(",")));
-        } else {
-            return Collections.emptySet();
-        }
+        return Stream.of(this.resourceIds.split(","))
+                .collect(Collectors.toSet());
     }
 
     @Override
     public boolean isSecretRequired() {
-        return secretRequired;
+        return this.secretRequired;
     }
 
     @Override
     public String getClientSecret() {
-        return clientSecret;
+        return this.clientSecret;
     }
 
     @Override
     public boolean isScoped() {
-        return scoped;
+        return this.scoped;
     }
 
     @Override
     public Set<String> getScope() {
-        if (StringUtils.isNotBlank(scopes)) {
-            return new HashSet<>(Arrays.asList(scopes.split(",")));
-        } else {
-            return Collections.emptySet();
-        }
-    }
-
-    @Override
-    public Set<String> getAuthorizedGrantTypes() {
-        if (StringUtils.isNotBlank(grantTypes)) {
-            return new HashSet<>(Arrays.asList(grantTypes.split(",")));
-        } else {
-            return Collections.emptySet();
-        }
+        return Stream.of(scope.split(","))
+                .collect(Collectors.toSet());
     }
 
     @Override
     public Set<String> getRegisteredRedirectUri() {
-        if (StringUtils.isNotBlank(registeredRedirectUris)) {
-            return new HashSet<>(Arrays.asList(registeredRedirectUris.split(",")));
-        } else {
-            return Collections.emptySet();
-        }
-    }
-
-    @Override
-    public Collection<GrantedAuthority> getAuthorities() {
-        if (org.springframework.util.StringUtils.hasText(grantedAuthorities)) {
-            return AuthorityUtils
-                    .commaSeparatedStringToAuthorityList(grantedAuthorities);
-        } else {
-            return Collections.EMPTY_LIST;
-        }
+        return Stream.of(this.webServerRedirectUri.split(","))
+                .collect(Collectors.toSet());
     }
 
     @Override
     public Integer getAccessTokenValiditySeconds() {
-        return accessTokenValiditySeconds;
+        return this.accessTokenValidity;
     }
 
     @Override
     public Integer getRefreshTokenValiditySeconds() {
-        return refreshTokenValiditySeconds;
+        return this.refreshTokenValidity;
     }
 
     @Override
@@ -154,13 +116,29 @@ public class OauthClientDetails implements ClientDetails {
     @Override
     public Map<String, Object> getAdditionalInformation() {
         Map<String, Object> map = new HashMap<>();
-        if (StringUtils.isNotBlank(additionalInformations)) {
-            String[] infos = additionalInformations.split(",");
+        if (StringUtils.isNotBlank(additionalInformation)) {
+            String[] infos = additionalInformation.split(",");
             for (String info : infos) {
                 String[] pairs = info.split("=");
                 map.put(pairs[0], pairs[1]);
             }
         }
         return map;
+    }
+
+    @Override
+    public Set<String> getAuthorizedGrantTypes() {
+        return Stream.of(authorizedGrantTypes.split(","))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Collection<GrantedAuthority> getAuthorities() {
+        if (org.springframework.util.StringUtils.hasText(authorities)) {
+            return AuthorityUtils
+                    .commaSeparatedStringToAuthorityList(authorities);
+        } else {
+            return Collections.EMPTY_LIST;
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.yonyougov.oauth.config;
 
+import com.yonyougov.oauth.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,10 +26,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.
-                authorizeRequests().antMatchers("/**").fullyAuthenticated()
+        http
+//              .anonymous().disable()
+                .csrf().disable()
+                .authorizeRequests().antMatchers("/**").fullyAuthenticated()
                 .and().httpBasic()
-                .and().formLogin().loginPage("/login").failureUrl("/login?error").permitAll();
+//                .and().formLogin().loginPage("/login").failureUrl("/login?error").permitAll()
+                ;
     }
 
     @Resource
@@ -36,8 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     protected UserDetailsService userDetailsService() {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        String finalPassword = "{bcrypt}"+bCryptPasswordEncoder.encode("123456");
+//        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+//        String finalPassword = "{bcrypt}"+bCryptPasswordEncoder.encode("123456");
         JdbcUserDetailsManager manager = new JdbcUserDetailsManager();
         manager.setDataSource(dataSource);
 //        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
