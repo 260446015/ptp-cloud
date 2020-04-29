@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests().antMatchers("/**").fullyAuthenticated()
                 .and().httpBasic()
-//                .and().formLogin().loginPage("/login").failureUrl("/login?error").permitAll()
+                .and().formLogin().loginPage("/login").failureUrl("/login?error").permitAll()
                 ;
     }
 
