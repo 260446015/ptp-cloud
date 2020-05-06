@@ -1,11 +1,16 @@
 server:
-  port: 8086
+  port: 8081
 
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
 spring:
+  autoconfigure:
+    # TODO: remove when fixed https://github.com/spring-projects/spring-security/issues/6314
+    exclude: org.springframework.boot.actuate.autoconfigure.security.reactive.ReactiveManagementWebSecurityAutoConfiguration
+    thymeleaf:
+      cache: false
   application:
     name: gateway
   datasource:
@@ -25,12 +30,28 @@ spring:
           uri: lb://client
           predicates:
             - Path=/client/**
-#          filters:
-#            - StripPrefix=0
-        - id: ptp-auth
-          uri: lb://ptp-auth
-          predicates:
-            - Path=/ptp-auth/**
+          filters:
+            - TokenRelay=
+  security:
+    oauth2:
+      client:
+        registration:
+          client:
+            provider: ptp-auth
+            client-id: client_1
+            client-secret: 123456
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
+#            redirect-uri-template: "{baseUrl}/client"
+            scope: openid,profile,resource.read,all
+        provider:
+          ptp-auth:
+            authorization-uri: http://localhost:8082/ptp-auth/oauth/authorize
+            token-uri: http://localhost:8082/ptp-auth/oauth/token
+            user-info-uri: http://localhost:8082/ptp-auth/userinfo
+            user-name-attribute: sub
+            jwk-set-uri: http://localhost:8082/ptp-auth/token_keys
 mybatis:
   mapper-locations: classpath*:mapper/*Mapper.xml
   configuration:
@@ -47,20 +68,7 @@ management:
         allowed-methods: "*"
         allowed-headers: "*"
         allow-credentials: true
-security:
-  oauth2:
-    client:
-      clientId: client_1
-      clientSecret: 123456
-      userAuthorizationUri: http://localhost:8082/ptp-auth/oauth/authorize
-      grant-type: code
-      scope: all
-      access-token-uri: http://localhost:8082/ptp-auth/oauth/token
-    resource:
-      token-info-uri: http://localhost:8082/ptp-auth/oauth/check_token
-      prefer-token-info: true
-
 logging:
   level:
-    root: info
+    root: debug
 

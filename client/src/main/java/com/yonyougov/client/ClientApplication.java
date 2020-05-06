@@ -21,4 +21,9 @@ public class ClientApplication {
         return ResponseEntity.ok(str);
     }
 
+    @GetMapping
+    public ResponseEntity str(){
+        return ResponseEntity.ok("hello world~~~");
+    }
+
 }

@@ -9,10 +9,10 @@ import org.springframework.data.redis.core.StringRedisTemplate;
  * @Author yindwe@yonyou.com
  * @Date 2020/4/2
  */
-@Configuration
+//@Configuration
 public class RedisConfig {
 
-    @Bean(name = {"redisTemplate", "stringRedisTemplate"})
+//    @Bean(name = {"redisTemplate", "stringRedisTemplate"})
     public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory factory) {
         StringRedisTemplate redisTemplate = new StringRedisTemplate();
         redisTemplate.setConnectionFactory(factory);
