@@ -31,12 +31,13 @@ spring:
           predicates:
             - Path=/client/**
           filters:
+            - StripPrefix=0
             - TokenRelay=
   security:
     oauth2:
       client:
         registration:
-          client:
+          login-client:
             provider: ptp-auth
             client-id: client_1
             client-secret: 123456
@@ -44,14 +45,20 @@ spring:
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
 #            redirect-uri-template: "{baseUrl}/client"
-            scope: openid,profile,resource.read,all
+            scope: all
         provider:
           ptp-auth:
+#            authorization-uri: http://localhost:8090/uaa/oauth/authorize
+#            token-uri: http://localhost:8090/uaa/oauth/token
+#            user-info-uri: http://localhost:8090/uaa/userinfo
+#            user-name-attribute: sub
+#            jwk-set-uri: http://localhost:8090/uaa/token_keys
             authorization-uri: http://localhost:8082/ptp-auth/oauth/authorize
             token-uri: http://localhost:8082/ptp-auth/oauth/token
             user-info-uri: http://localhost:8082/ptp-auth/userinfo
             user-name-attribute: sub
             jwk-set-uri: http://localhost:8082/ptp-auth/token_keys
+
 mybatis:
   mapper-locations: classpath*:mapper/*Mapper.xml
   configuration:
