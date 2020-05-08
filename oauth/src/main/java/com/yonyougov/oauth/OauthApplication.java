@@ -20,5 +20,6 @@ public class OauthApplication {
         return modelAndView;
     }
 
+    //INSERT INTO `menhu`.`oauth_client_details` (`client_id`, `resource_ids`, `client_secret`, `scope`, `authorized_grant_types`, `web_server_redirect_uri`, `authorities`, `access_token_validity`, `refresh_token_validity`, `additional_information`, `autoapprove`, `load_client_by_client_id`, `scoped`, `secret_required`) VALUES ('login-client', NULL, '{bcrypt}$2a$10$u2IzDWtq.0cSgRNFssWIT.kL.RyAwx3muZwaxTjx459j42u7gcNcy', 'openid,profile,email,resource.read', 'authorization_code,password', 'http://localhost:8081/login/oauth2/code/login-client,http://www.baidu.com,http://localhost:8081/gateway-redirect,http://localhost:8081/login/oauth2/code/aaa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 }
