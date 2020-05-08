@@ -39,13 +39,13 @@ spring:
         registration:
           login-client:
             provider: ptp-auth
-            client-id: client_1
-            client-secret: 123456
+            client-id: login-client
+            client-secret: secret
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+#            redirect-uri: "{baseUrl}/gateway-redirect"
             redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
-#            redirect-uri-template: "{baseUrl}/client"
-            scope: all
+            scope: openid
         provider:
           ptp-auth:
 #            authorization-uri: http://localhost:8090/uaa/oauth/authorize
@@ -77,5 +77,5 @@ management:
         allow-credentials: true
 logging:
   level:
-    root: debug
+    root: info
 

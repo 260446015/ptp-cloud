@@ -23,3 +23,7 @@ security:
   oauth2:
     authorization:
       check-token-access: permitAll()
+
+logging:
+  level:
+    org.springframework.security.web: debug

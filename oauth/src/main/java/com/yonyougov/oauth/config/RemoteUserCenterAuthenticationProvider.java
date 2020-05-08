@@ -7,10 +7,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @Author yindwe@yonyou.com
@@ -31,9 +34,10 @@ public class RemoteUserCenterAuthenticationProvider implements AuthenticationPro
         String username = authentication.getPrincipal().toString();
         String password = authentication.getCredentials().toString();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        List<SimpleGrantedAuthority> role_user = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
         Users users = userRepository.findByUsernameAndPassword(username,password);
         if(users != null){
-            return new UsernamePasswordAuthenticationToken(username, password, authorities);
+            return new UsernamePasswordAuthenticationToken(username, password, role_user);
         }
         throw new UsernameNotFoundException("用户名或密码错误");
     }
