@@ -43,4 +43,17 @@ public class GatewayConfiguration {
         model.addAttribute("userAttributes", oauth2User.getAttributes());
         return "index";
     }
+
+    @GetMapping("/login")
+    public String login(Model model,
+                        @RegisteredOAuth2AuthorizedClient OAuth2AuthorizedClient authorizedClient,
+                        @AuthenticationPrincipal OAuth2User oauth2User) {
+        model.addAttribute("userName", oauth2User.getName());
+        model.addAttribute("clientName", authorizedClient.getClientRegistration().getClientName());
+        model.addAttribute("userAttributes", oauth2User.getAttributes());
+        return "login";
+    }
+
+
+
 }

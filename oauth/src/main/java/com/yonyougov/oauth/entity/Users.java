@@ -27,6 +27,7 @@ public class Users implements UserDetails,Serializable {
     private String password;
     private String level;
     private int age;
+    private Boolean enabled;
     private Boolean isAccountNonLocked;
 
     @Override
