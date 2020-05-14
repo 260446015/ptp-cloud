@@ -35,25 +35,27 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Resource
     UserDetailsService userDetailsService;
     @Resource
-    DataSource dataSource;
+    private DataSource dataSource;
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     @Resource
     RedisConnectionFactory redisConnectionFactory;
     //配置appid、appkey、回调地址、token有效期
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory().withClient("login-client").secret("{bcrypt}$2a$10$swKKXxa1Ua0GhLRBDkgsyOoi76vpowvElZbZSn1B3IHyEw6Z.gxCC")
-                .redirectUris("http://localhost:8081/login/oauth2/code/login-client","http://localhost:8086/sso/login","http://localhost:8086/sso/login/oauth2/code/login-client")
-                .scopes("all").authorizedGrantTypes("authorization_code","refresh_token","password")
-                .authorities("uaa.resource")
-                .accessTokenValiditySeconds(6000).refreshTokenValiditySeconds(60000);
-//        clients.jdbc(dataSource);
+//        clients.inMemory()
+//                .withClient("login-client").secret(passwordEncoder.encode("secret"))
+//                .redirectUris("http://localhost:8081/login/oauth2/code/login-client","http://localhost:8086/sso/login","http://localhost:8086/sso/login/oauth2/code/login-client")
+//                .scopes("all").authorizedGrantTypes("authorization_code","refresh_token","password")
+//                .authorities("uaa.resource")
+//                .accessTokenValiditySeconds(6000).refreshTokenValiditySeconds(60000)
+//                .and()
+//        .withClient("client_1").secret(passwordEncoder.encode("123456"))
+//                .redirectUris("http://www.baidu.com").authorizedGrantTypes("authorization_code","refresh_token","password")
+//                .scopes("all").accessTokenValiditySeconds(7200).refreshTokenValiditySeconds(7200);
+        clients.jdbc(dataSource);
     }
-
-//    @Bean
-//    public ClientDetailsService clientDetails() {
-//        return new JdbcClientDetailsService(dataSource);
-//    }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
@@ -70,8 +72,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         // 允许表单认证
         security.allowFormAuthenticationForClients();
         security.checkTokenAccess("permitAll()");
-//        security.tokenKeyAccess("permitAll()").checkTokenAccess("permitAll()");
     }
+
 
 
 }

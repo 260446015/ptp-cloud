@@ -45,19 +45,19 @@ spring:
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
 #            redirect-uri: "{baseUrl}/gateway-redirect"
             redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
-            scope: openid
+            scope: all
         provider:
           ptp-auth:
-            authorization-uri: http://localhost:8090/uaa/oauth/authorize
-            token-uri: http://localhost:8090/uaa/oauth/token
-            user-info-uri: http://localhost:8090/uaa/userinfo
-            user-name-attribute: sub
-            jwk-set-uri: http://localhost:8090/uaa/token_keys
-#            authorization-uri: http://localhost:8082/ptp-auth/oauth/authorize
-#            token-uri: http://localhost:8082/ptp-auth/oauth/token
-#            user-info-uri: http://localhost:8082/ptp-auth/userinfo
+#            authorization-uri: http://localhost:8090/uaa/oauth/authorize
+#            token-uri: http://localhost:8090/uaa/oauth/token
+#            user-info-uri: http://localhost:8090/uaa/userinfo
 #            user-name-attribute: sub
-#            jwk-set-uri: http://localhost:8082/ptp-auth/token_keys
+#            jwk-set-uri: http://localhost:8090/uaa/token_keys
+            authorization-uri: http://localhost:8082/ptp-auth/oauth/authorize
+            token-uri: http://localhost:8082/ptp-auth/oauth/token
+            user-info-uri: http://localhost:8082/ptp-auth/userinfo
+            user-name-attribute: name
+            jwk-set-uri: http://localhost:8082/ptp-auth/token_keys
 
 mybatis:
   mapper-locations: classpath*:mapper/*Mapper.xml

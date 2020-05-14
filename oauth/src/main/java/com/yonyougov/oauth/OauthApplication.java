@@ -4,9 +4,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 @SpringBootApplication
@@ -20,6 +22,13 @@ public class OauthApplication {
     public ModelAndView redirect(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
+        return modelAndView;
+    }
+
+    @PostMapping("login")
+    public ModelAndView login(HttpServletRequest request){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
         return modelAndView;
     }
 
