@@ -1,8 +1,10 @@
 package com.yonyougov.oauth;
 
+import com.yonyougov.oauth.config.SecurityProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,7 @@ import java.security.Principal;
 
 @SpringBootApplication
 @RestController
+@EnableConfigurationProperties(SecurityProperties.class)
 public class OauthApplication {
 
     public static void main(String[] args) {
@@ -25,7 +28,7 @@ public class OauthApplication {
         return modelAndView;
     }
 
-    @PostMapping("login")
+    @PostMapping("loginForm")
     public ModelAndView login(HttpServletRequest request){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");

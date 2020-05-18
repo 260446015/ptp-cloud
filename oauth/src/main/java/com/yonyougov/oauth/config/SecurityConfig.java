@@ -1,5 +1,6 @@
 package com.yonyougov.oauth.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,12 +26,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource
     private DataSource dataSource;
+    @Resource
+    private TigerAuthenticationSuccessHandler tigerAuthenticationSuccessHandler;
+    @Resource
+    private TigerAuthenticationFailureHandler tigerAuthenticationFailureHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/**").fullyAuthenticated()
+        http.
+                csrf().disable()
+                .authorizeRequests().antMatchers("/**").fullyAuthenticated()
+                .antMatchers("/login","/authentication/require").permitAll()
                 .and().httpBasic()
-                .and().formLogin().loginPage("/login").failureUrl("/login?error").permitAll();
+                .and().formLogin().loginPage("/authentication/require")
+                .loginProcessingUrl("/authentication/form").successHandler(tigerAuthenticationSuccessHandler).failureHandler(tigerAuthenticationFailureHandler)
+                .permitAll()
+        ;
     }
 
     @Bean

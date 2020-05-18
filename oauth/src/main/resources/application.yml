@@ -7,6 +7,8 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
 spring:
+  thymeleaf:
+    cache: false
   autoconfigure:
     exclude: org.springframework.boot.actuate.autoconfigure.security.reactive.ReactiveManagementWebSecurityAutoConfiguration
   application:
@@ -29,3 +31,10 @@ security:
 logging:
   level:
     org.springframework.security: debug
+
+
+ptp-auth:
+  auth:
+    browser:
+      #loginPage: /demo-login.html # 这里可以配置成自己的非标准登录界面
+      loginType: JSON
