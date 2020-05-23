@@ -26,21 +26,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource
     private DataSource dataSource;
-    @Resource
-    private TigerAuthenticationSuccessHandler tigerAuthenticationSuccessHandler;
-    @Resource
-    private TigerAuthenticationFailureHandler tigerAuthenticationFailureHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.
-                csrf().disable()
-                .authorizeRequests().antMatchers("/**").fullyAuthenticated()
-                .antMatchers("/login","/authentication/require").permitAll()
-                .and().httpBasic()
-                .and().formLogin().loginPage("/authentication/require")
-                .loginProcessingUrl("/authentication/form").successHandler(tigerAuthenticationSuccessHandler).failureHandler(tigerAuthenticationFailureHandler)
+        http
+//              .anonymous().disable()
+//                .csrf().disable()
+//                .authorizeRequests().antMatchers("/**").fullyAuthenticated()
+//                .and().httpBasic()
+//                .and().formLogin().loginProcessingUrl("/xxx").loginPage("/login").failureUrl("/login?error").permitAll()
+        // 配置当前http security要生效的url
+                .csrf().disable()
+                .requestMatchers()
+                .antMatchers("/auth/login", "/authentication/base", "/oauth/authorize")
+                .and()
+                .authorizeRequests()
+                // 自定义页面或处理url是，如果不配置全局允许，浏览器会提示服务器将页面转发多次
+                .antMatchers("/auth/login", "/authentication/base")
                 .permitAll()
+                .anyRequest()
+                .authenticated();
+
+        // 表单登录
+        http.formLogin()
+                // 登录页面
+                .loginPage("/auth/login")
+                // 登录处理url
+                .loginProcessingUrl("/authentication/base")
         ;
     }
 

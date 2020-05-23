@@ -6,12 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.*;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
@@ -28,6 +28,7 @@ import javax.sql.DataSource;
  */
 @EnableAuthorizationServer
 @Configuration
+@EnableResourceServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Resource
@@ -62,9 +63,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints
                 .tokenStore(new RedisTokenStore(redisConnectionFactory))
                 .authenticationManager(authenticationManager)
-                .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST);
-        endpoints.authenticationManager(authenticationManager);
-        endpoints.userDetailsService(userDetailsService);
+                .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
+                .userDetailsService(userDetailsService)
+                .pathMapping("/oauth/confirm_access","/custom/confirm_access")
+                ;
     }
 
     @Override
@@ -73,7 +75,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         security.allowFormAuthenticationForClients();
         security.checkTokenAccess("permitAll()");
     }
-
 
 
 }

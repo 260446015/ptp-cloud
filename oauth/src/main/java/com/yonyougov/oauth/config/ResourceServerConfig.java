@@ -33,10 +33,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 // Since we want the protected resources to be accessible in the UI as well we need
                 // session creation to be allowed (it's disabled by default in 2.0.6)
                 //另外，如果不设置，那么在通过浏览器访问被保护的任何资源时，每次是不同的SessionID，并且将每次请求的历史都记录在OAuth2Authentication的details的中
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .and()
-                .authorizeRequests()
-                .antMatchers("/userinfo")
-                .authenticated();
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers("/userinfo","/loginForm")
+//                .authenticated();
+        .antMatcher("/userinfo").authorizeRequests()
+                .anyRequest().authenticated();
     }
 }
